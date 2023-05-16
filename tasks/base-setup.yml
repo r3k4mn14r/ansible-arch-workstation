@@ -1,0 +1,15 @@
+- name: Install system packages
+  become: true
+  pacman:
+    name:
+      - base-devel
+      - yay
+  tags:
+    - install
+    - base
+
+- name: Install terminal fonts
+  command: yay -S ttf-sourcecodepro-nerd --noconfirm
+  tags:
+    - install
+    - base

@@ -1,0 +1,14 @@
+- name: Setup dev tools
+  become: true
+  pacman: 
+    name:
+      - tldr
+      - ripgrep
+      - fd
+      - git
+      - bat
+      - alacritty
+      - npm
+  tags:
+    - install
+    - tools

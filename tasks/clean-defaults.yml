@@ -1,0 +1,10 @@
+- name: Remove system default dotfiles
+  file:
+    path: "{{ lookup('env', 'HOME') }}/{{ item }}"
+    state: absent
+  with_items:
+    - .zshrc
+    - .i3
+    - .Xresources
+  tags:
+    - install

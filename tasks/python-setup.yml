@@ -1,0 +1,61 @@
+- name: Remove pyenv installation
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.pyenv"
+    state: absent
+  tags:
+    - install
+    - python
+
+- name: Install pyenv
+  pacman: 
+    name: pyenv
+  become: true
+  tags:
+    - install
+    - python
+
+- name: Set python version
+  set_fact:
+    latest_python: $(pyenv install --list | grep --extended-regexp "^\s*[0-9][0-9.]*[0-9]\s*$" | tail -1)
+  tags:
+    - install
+    - python
+
+- name: Install latest python
+  shell: pyenv install {{ latest_python }}
+  tags:
+    - install
+    - python
+- name: Set python versions path
+  shell: pyenv global {{ latest_python }}
+  tags:
+    - install
+    - python
+
+- name: Install pipx
+  shell: pyenv exec pip install --user pipx
+  tags:
+    - install
+    - python
+
+- name: Uninstall all pipx packages
+  command: pipx uninstall-all
+  tags:
+    - install
+    - python
+
+- name: Install python programs
+  command: pipx install "{{ item }}"
+  with_items:
+    - ipython
+    - black
+    - poetry
+  tags:
+    - install
+    - python
+
+- name: Configure poetry
+  command: poetry config virtualenvs.in-project true
+  tags:
+    - install
+    - python

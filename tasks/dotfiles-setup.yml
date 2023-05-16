@@ -1,0 +1,47 @@
+- name: Install stow
+  become: true
+  pacman: 
+    name: stow
+  tags:
+    - install
+    - dotfiles
+
+- name: Cloning dotfiles
+  git:
+    repo: git@github.com:r3k4mn14r/dotfiles.git
+    dest: "{{ lookup('env', 'HOME') }}/.dotfiles"
+    recursive: yes
+    update: yes
+    accept_hostkey: yes
+    version: main
+  tags:
+    - install
+    - dotfiles
+
+- name: Unlinking previous dotfiles
+  command: "stow -D -t {{ lookup('env', 'HOME') }} -d {{ lookup('env', 'HOME') }}/.dotfiles {{ item }}"
+  with_items:
+    - zsh
+    - tmux
+    - nvim
+    - ipython
+    - i3
+    - term
+    - alacritty
+  tags:
+    - install
+    - dotfiles
+
+- name: Linking dotfiles
+  command: "stow -t {{ lookup('env', 'HOME') }} -d {{ lookup('env', 'HOME') }}/.dotfiles {{ item }}"
+  with_items:
+    - zsh
+    - tmux
+    - nvim
+    - ipython
+    - i3
+    - term
+    - alacritty
+  tags:
+    - install
+    - dotfiles
