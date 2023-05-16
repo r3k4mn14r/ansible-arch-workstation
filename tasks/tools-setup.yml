@@ -2,6 +2,7 @@
   become: true
   pacman: 
     name:
+      - tmux
       - tldr
       - ripgrep
       - fd
